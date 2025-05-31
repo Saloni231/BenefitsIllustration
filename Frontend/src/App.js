@@ -1,27 +1,29 @@
+import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { CSpinner } from "@coreui/react";
 import "./scss/style.scss";
-import React from "react";
 
-const DefaultLayout = React.lazy(() => import("./layout/DefaultLayout"));
-const Login = React.lazy(() => import("./views/pages/login/Login"));
-const Register = React.lazy(() => import("./views/pages/register/Register"));
-const PolicyCalculation = React.lazy(
-  () => import("./views/pages/policyCalculation/PolicyCalculation")
-);
-const Illustration = React.lazy(
-  () => import("./views/pages/illustration/Illustration")
-);
+const Login = React.lazy(() => import("./views/login/Login"));
+const Register = React.lazy(() => import("./views/register/Register"));
+const AuthWrapper = React.lazy(() => import("./views/AuthWrapper/AuthWrapper")); // Use AuthWrapper
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<DefaultLayout />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/policyCalculation" element={<PolicyCalculation />} />
-        <Route path="/Illustration" element={<Illustration />} />
-      </Routes>
+      <Suspense
+        fallback={
+          <div className="pt-3 text-center">
+            <CSpinner color="primary" variant="grow" />
+          </div>
+        }
+      >
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<AuthWrapper />} />{" "}
+          {/* Home Calls AuthWrapper */}
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 };
